@@ -1,0 +1,129 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile  
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "9000:9000" 
+    environment:
+      - USERSERVICE_HOST=user-service
+      - USERSERVICE_PORT=7070
+      - DEVICESERVICE_HOST=device-service
+      - DEVICESERVICE_PORT=8080
+      - COMMANDSERVICE_HOST=command-service
+      - COMMANDSERVICE_PORT=9090
+    depends_on:
+      - user-service
+      - device-service
+      - command-service
+    networks:
+      - mynetwork
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile  
+    volumes:
+       - ./logs:/app/logs
+    ports:
+      - "7070:7070"
+    environment:
+      - USERSERVICE_HOST=user-service
+      - USERSERVICE_PORT=7070
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - mynetwork
+
+  device-service:
+    build:
+      context: ./device-service
+      dockerfile: Dockerfile  
+    volumes:
+       - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    environment:
+      - DEVICESERVICE_HOST=device-service
+      - DEVICESERVICE_PORT=8080
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+    networks:
+      - mynetwork
+
+  command-service:
+    build:
+      context: ./command-service
+      dockerfile: Dockerfile  
+    volumes:
+       - ./logs:/app/logs
+    ports:
+      - "9090:9090"
+    environment:
+      - COMMANDSERVICE_HOST=command-service
+      - COMMANDSERVICE_PORT=9090
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq 
+    networks:
+      - mynetwork 
+
+  redis:
+    container_name: redis
+    image: redis:7.2.5-alpine
+    restart: always
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - mynetwork
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.4
+    restart: always
+    ports:
+      - "27018:27017"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5673:5672"
+      - "15673:15672"  
+    volumes:
+      - ${HOME}/dev-rabbitmq/data/:/var/lib/rabbitmq
+      - ${HOME}/dev-rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  db-data1:
+

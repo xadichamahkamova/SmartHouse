@@ -1,0 +1,46 @@
+syntax="proto3";
+
+option go_package = "./genproto/devicepb";
+
+service DeviceService {
+    rpc CreateDevice(Device) returns (ResponseOfDevice);
+    rpc GetDevice(SingleID) returns (Device);
+    rpc ListOfDevice(ListRequestOfDevice) returns (ListResponseOfDevice);
+    rpc UpdateDevice(Device)   returns (ResponseOfDevice);
+    rpc DeleteDevice(SingleID)  returns (ResponseOfDevice);
+}
+
+message Configuration {
+    int32 brightness = 1;
+    string color = 2;
+}
+
+message Device {
+    string device_id = 1;
+    string user_id = 2;
+    string device_type = 3;
+    string device_name = 4;
+    string device_status = 5;
+    Configuration configuration = 6;
+    string location = 7;
+    string firmware_version = 8;
+    string connectivity_status = 9;
+    string created_at = 10;
+    string updated_at = 11;
+    int64 deleted_at = 12;
+}
+
+message SingleID {
+    string device_id = 1;
+}
+
+message ListRequestOfDevice {}
+
+message ListResponseOfDevice {
+    repeated Device list = 1;
+}
+
+message ResponseOfDevice {
+    string id = 1;
+    string status = 2;
+}

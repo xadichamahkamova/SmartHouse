@@ -1,0 +1,618 @@
+basePath: /
+definitions:
+  models.Command:
+    properties:
+      command_id:
+        type: string
+      command_payload:
+        $ref: '#/definitions/models.Payload'
+      command_type:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      device_id:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Configuration:
+    properties:
+      brightness:
+        type: integer
+      color:
+        type: string
+    type: object
+  models.Device:
+    properties:
+      configuration:
+        $ref: '#/definitions/models.Configuration'
+      connectivity_status:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      device_id:
+        type: string
+      device_name:
+        type: string
+      device_status:
+        type: string
+      device_type:
+        type: string
+      firmware_version:
+        type: string
+      location:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.ListResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+    type: object
+  models.ListResponseOfCommand:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.Command'
+        type: array
+    type: object
+  models.ListResponseOfDevice:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.Device'
+        type: array
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        type: string
+      password_hash:
+        type: string
+    type: object
+  models.Message:
+    properties:
+      err:
+        type: string
+    type: object
+  models.Payload:
+    properties:
+      brightness:
+        type: integer
+    type: object
+  models.Profile:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Response:
+    properties:
+      status:
+        type: string
+      token:
+        $ref: '#/definitions/models.Tokens'
+    type: object
+  models.ResponseOfCommand:
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  models.ResponseOfDevice:
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Tokens:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  models.UniverResponse:
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      password_hash:
+        type: string
+      profile:
+        $ref: '#/definitions/models.Profile'
+      updated_at:
+        type: string
+      user_name:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: Api-gateway service
+  version: "1.0"
+paths:
+  /command:
+    put:
+      consumes:
+      - application/json
+      description: This method updates command
+      parameters:
+      - description: Command
+        in: body
+        name: command
+        required: true
+        schema:
+          $ref: '#/definitions/models.Command'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfCommand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: UPDATE COMMAND
+      tags:
+      - COMMAND
+  /command/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This method deletes command
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfCommand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: DELETE COMMAND
+      tags:
+      - COMMAND
+    get:
+      consumes:
+      - application/json
+      description: This method gets command
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Command'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET COMMAND
+      tags:
+      - COMMAND
+  /commands:
+    get:
+      consumes:
+      - application/json
+      description: This method gets commands
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ListResponseOfCommand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET COMMANDS
+      tags:
+      - COMMAND
+  /control:
+    post:
+      consumes:
+      - application/json
+      description: This method creates command
+      parameters:
+      - description: Command
+        in: body
+        name: command
+        required: true
+        schema:
+          $ref: '#/definitions/models.Command'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfCommand'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: POST CONTROL
+      tags:
+      - COMMAND
+  /devices:
+    get:
+      consumes:
+      - application/json
+      description: This method gets devices
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ListResponseOfDevice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET DEVICES
+      tags:
+      - DEVICE
+    post:
+      consumes:
+      - application/json
+      description: This method creates device
+      parameters:
+      - description: Device
+        in: body
+        name: device
+        required: true
+        schema:
+          $ref: '#/definitions/models.Device'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfDevice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: CREATE DEVICE
+      tags:
+      - DEVICE
+    put:
+      consumes:
+      - application/json
+      description: This method updates device
+      parameters:
+      - description: Device
+        in: body
+        name: device
+        required: true
+        schema:
+          $ref: '#/definitions/models.Device'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfDevice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: UPDATE DEVICE
+      tags:
+      - DEVICE
+  /devices/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This method deletes device
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseOfDevice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: DELETE DEVICE
+      tags:
+      - DEVICE
+    get:
+      consumes:
+      - application/json
+      description: This method gets device
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Device'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET DEVICE
+      tags:
+      - DEVICE
+  /users:
+    put:
+      consumes:
+      - application/json
+      description: This method updates user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UniverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: UPDATE USER
+      tags:
+      - USER
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This method deletes user
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UniverResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: DELETE USER
+      tags:
+      - USER
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: This method gets user
+      parameters:
+      - description: LoginRequest
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET USER
+      tags:
+      - USER
+  /users/profile:
+    get:
+      consumes:
+      - application/json
+      description: This method gets users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: GET USERS
+      tags:
+      - USER
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: This method creates users
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Message'
+      security:
+      - BearerAuth: []
+      summary: CREATE USER
+      tags:
+      - USER
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authourization
+    type: apiKey
+swagger: "2.0"

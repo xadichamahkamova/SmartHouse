@@ -1,0 +1,57 @@
+syntax="proto3";
+
+option go_package = "./genproto/userpb";
+
+service UserService {
+    rpc Register(User) returns (Response);
+    rpc Login(LoginRequest) returns (Response);
+    rpc ListOfUser(ListRequest) returns (ListResponse);
+    rpc UpdateUser(User)    returns (UniverResponse);
+    rpc DeleteUser(DeleteRequest)  returns (UniverResponse);
+}
+
+message Profile {
+    string name = 1;
+    string address = 2;
+}
+
+message User {
+    string id = 1;
+    string user_name = 2;
+    string email = 3;
+    string password_hash = 4;
+    Profile profile = 5;
+    string created_at = 6;
+    string updated_at = 7;
+    int64 deleted_at = 8;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password_hash = 2;
+}
+
+message ListRequest {}
+
+message ListResponse {
+    repeated User list = 1;
+}
+
+message DeleteRequest {
+    string id = 1;
+}
+
+message Tokens {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message Response {
+    Tokens token = 1;
+    string status = 2;
+}
+
+message UniverResponse {
+    string id = 1;
+    string status = 2;
+}

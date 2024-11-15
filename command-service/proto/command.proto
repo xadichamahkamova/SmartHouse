@@ -1,0 +1,42 @@
+syntax="proto3";
+
+option go_package = "./genproto/commandpb";
+
+service CommandService {
+    rpc CreateCommand(Command) returns (ResponseOfCommand);
+    rpc GetCommand(SingleId) returns (Command);
+    rpc ListOfCommand(ListRequestOfCommand) returns (ListResponseOfCommand);
+    rpc UpdateCommand(Command)   returns (ResponseOfCommand);
+    rpc DeleteCommand(SingleId)  returns (ResponseOfCommand);
+}
+
+message Payload {
+    int32 brightness = 1;
+}
+
+message Command {
+    string command_id = 1;
+    string device_id = 2;
+    string user_id = 3;
+    string command_type = 4;
+    Payload command_payload = 5;
+    string status = 6;
+    string created_at = 7;;
+    string updated_at = 8;
+    int64 deleted_at = 9;
+}
+
+message SingleId {
+    string command_id = 1;
+}
+
+message ListRequestOfCommand {}
+
+message ListResponseOfCommand {
+    repeated Command list = 1;
+}
+
+message ResponseOfCommand {
+    string id = 1;
+    string status = 2;
+}
